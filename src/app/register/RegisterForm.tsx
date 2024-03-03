@@ -3,29 +3,29 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 
 type FormState = {
-    registerUsername: string;
-    registerPassword: string;
-    confirmRegisterPassword: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
 };
 
 type ErrorState = {
-    usernameRequiredError: boolean;
-    passwordRequiredError: boolean;
-    passwordsMatchError: boolean;
+    usernameError: boolean;
+    passwordError: boolean;
+    confirmPasswordError: boolean;
 };
 
 export default function RegisterForm() {
     
     const [form, setForm] = useState<FormState>({
-        registerUsername: '',
-        registerPassword: '',
-        confirmRegisterPassword: '',
+        username: '',
+        password: '',
+        confirmPassword: '',
     })
 
     const [errors, setErrors] = useState<ErrorState>({
-        usernameRequiredError: true,
-        passwordRequiredError: true,
-        passwordsMatchError: true,
+        usernameError: true,
+        passwordError: true,
+        confirmPasswordError: true,
     });
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -38,70 +38,70 @@ export default function RegisterForm() {
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setForm({
-            registerUsername: '',
-            registerPassword: '',
-            confirmRegisterPassword: '',
+            username: '',
+            password: '',
+            confirmPassword: '',
         });
         setErrors({
-            usernameRequiredError: true,
-            passwordRequiredError: true,
-            passwordsMatchError: true,
+            usernameError: true,
+            passwordError: true,
+            confirmPasswordError: true,
         });
-        alert(form.registerUsername + ' ' + form.registerPassword);
+        alert(form.username + ' ' + form.password);
     };
 
     useEffect(() => {
         const newErrors = {
-            usernameRequiredError: form.registerUsername.trim() === '',
-            passwordRequiredError: form.registerPassword.trim() === '',
-            passwordsMatchError: form.confirmRegisterPassword.trim() !== form.registerPassword.trim(),
+            usernameError: form.username === '',
+            passwordError: form.password === '',
+            confirmPasswordError: form.confirmPassword !== form.password || form.confirmPassword === '',
         };
         setErrors(newErrors);
-    }, [form.registerUsername, form.registerPassword, form.confirmRegisterPassword]);
+    }, [form]);
     
 
     return(
         <form onSubmit={handleSubmit}>
             <div>
-                <label htmlFor='registerUsername'>Username</label>
-                <input className='border-black border-2' id='registerUsername' type='text' value={form.registerUsername} onChange={handleChange}></input>
-                {errors.usernameRequiredError === true ?
+                <label htmlFor='username'>Username</label>
+                <input className='border-black border-2' id='username' type='text' value={form.username} onChange={handleChange}></input>
+                {errors.usernameError === true ?
                     <div>
-                        <span className='text-gray-500'>A username is required. Please enter your username.</span>
+                        <span className='text-gray-500'>Make a username.</span>
                     </div>
                 :
                     <div> 
-                        <span>A username is required. Please enter your username. </span>
+                        <span>Make a username. </span><span className='text-green-500'>✔️</span>
                     </div>
                 }  
             </div>
             <div>
-                <label htmlFor='registerPassword'>Password</label>
-                <input className='border-black border-2' id='registerPassword' type='password' value={form.registerPassword} onChange={handleChange}></input>
-                {errors.passwordRequiredError === true ?
+                <label htmlFor='password'>Password</label>
+                <input className='border-black border-2' id='password' type='password' value={form.password} onChange={handleChange}></input>
+                {errors.passwordError === true ?
                     <div>
-                        <span className='text-gray-500'>A password is required. Please enter a password.</span>
+                        <span className='text-gray-500'>Make a password.</span>
                     </div>
                 :
                     <div> 
-                        <span>A password is required. Please enter a password. </span>
+                        <span>Make a password. </span><span className='text-green-500'>✔️</span>
                     </div>
                 }  
             </div>
             <div>
-                <label htmlFor='confirmRegisterPassword'>Confirm Password</label>
-                <input className='border-black border-2' id='confirmRegisterPassword' type='password' value={form.confirmRegisterPassword} onChange={handleChange}></input>
-                {errors.passwordsMatchError === true ?
+                <label htmlFor='confirmPassword'>Confirm Password</label>
+                <input className='border-black border-2' id='confirmPassword' type='password' value={form.confirmPassword} onChange={handleChange}></input>
+                {errors.confirmPasswordError === true ?
                     <div>
-                        <span className='text-gray-500'>Passwords must match.</span>
+                        <span className='text-gray-500'>Confirm your password.</span>
                     </div>
                 :
                     <div> 
-                        <span>Passwords must match.</span>
+                        <span>Confirm your password. </span><span className='text-green-500'>✔️</span>
                     </div>
                 }  
             </div>
-            {errors.usernameRequiredError === true || errors.passwordRequiredError === true || errors.passwordsMatchError === true ?
+            {errors.usernameError === true || errors.passwordError === true || errors.confirmPasswordError === true ?
                 <button disabled={true} type='submit' className='border-black border-2 text-gray-500'>
                     Submit
                 </button>

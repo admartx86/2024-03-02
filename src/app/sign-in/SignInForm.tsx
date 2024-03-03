@@ -3,25 +3,25 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 
 type FormState = {
-    signInUsername: string;
-    signInPassword: string;
+    username: string;
+    password: string;
 }
 
 type ErrorState = {
-    usernameRequired: boolean;
-    passwordRequired: boolean;
+    usernameError: boolean;
+    passwordError: boolean;
 };
 
 export default function SignInForm() {
     
     const [form, setForm] = useState<FormState>({
-        signInUsername: '',
-        signInPassword: '',
+        username: '',
+        password: '',
     })
 
     const [errors, setErrors] = useState<ErrorState>({
-        usernameRequired: true,
-        passwordRequired: true,
+        usernameError: true,
+        passwordError: true,
     });
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -33,74 +33,54 @@ export default function SignInForm() {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        alert(form.signInUsername + ' ' + form.signInPassword);
+        alert(form.username + ' ' + form.password);
         setForm({
-            signInUsername: '',
-            signInPassword: '',
+            username: '',
+            password: '',
         });
         setErrors({
-            usernameRequired: true,
-            passwordRequired: true,
+            usernameError: true,
+            passwordError: true,
         });
     };
 
-    useEffect( () => {
-        if (form.signInUsername.trim() === '') {
-            setErrors({
-                ...errors,
-                usernameRequired: true,
-            });
-        } else {
-            setErrors({
-                ...errors,
-                usernameRequired: false,
-            });
-        }; 
-    }, [form.signInUsername]);
-
-    useEffect( () => {
-        if (form.signInPassword.trim() === '') {
-            setErrors({
-                ...errors,
-                passwordRequired: true,
-            });
-        } else {
-            setErrors({
-                ...errors,
-                passwordRequired: false,
-            });
-        }; 
-    }, [form.signInPassword]);
+    useEffect(() => {
+        const newErrors = {
+            usernameError: form.username === '',
+            passwordError: form.password === '',
+        };
+        setErrors(newErrors);
+    }, [form]);
 
     return(
         <form onSubmit={handleSubmit}>
             <div>
                 <label htmlFor='signInUsername'>Username</label>
-                <input className='border-black border-2' id='signInUsername' type='text' value={form.signInUsername} onChange={handleChange}></input>
-                {errors.usernameRequired === true ?
+                <input className='border-black border-2' id='username' type='text' value={form.username} onChange={handleChange}></input>
+                {errors.usernameError === true ?
                     <div>
-                        <span className='text-gray-500'>A username is required. Please enter your username.</span>
+                        <span className='text-gray-500'>Enter your username.</span>
                     </div>
                 :
                     <div> 
-                        <span>A username is required. Please enter your username. </span>
+                        <span>Enter your username. </span><span className='text-green-500'>✔️</span>
                     </div>
                 }   
             </div>
             <div>
                 <label htmlFor='signInPassword'>Password</label>
-                <input className='border-black border-2' id='signInPassword' type='password' value={form.signInPassword} onChange={handleChange}></input>
-                {errors.passwordRequired === true ?
+                <input className='border-black border-2' id='password' type='password' value={form.password} onChange={handleChange}></input>
+                {errors.passwordError === true ?
                     <div>
-                        <span className='text-gray-500'>A password is required. Please enter your password.</span>
+                        <span className='text-gray-500'>Enter your password.</span>
                     </div>
                 : 
                     <div>
-                        <span>A password is required. Please enter your password. </span>
+                        <span>Enter your password. </span><span className='text-green-500'>✔️</span>
                     </div>
                 }
             </div>
-            {errors.usernameRequired === true || errors.passwordRequired === true ?
+            {errors.usernameError === true || errors.passwordError === true ?
                 <button disabled={true} type='submit' className='border-black border-2 text-gray-500'>
                     Submit
                 </button>

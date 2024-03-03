@@ -10,6 +10,7 @@ export default function SignIn() {
             <Link href='/sign-in'>Sign In</Link>
             <h1>Sign In</h1>
             <SignInForm/>
+            New user? <Link href='/register'>Create an account</Link>.
         </div>
     );
 };
